@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人知识薄弱点攻克系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="top-nav">
+        <div class="nav-brand">知识攻克系统</div>
+        <nav class="nav-links">
+            <button id="overview-btn" class="nav-btn active">薄弱点概览</button>
+            <button id="entry-btn" class="nav-btn">知识点录入</button>
+            <button id="practice-btn" class="nav-btn">专项刷题</button>
+            <button id="review-btn" class="nav-btn">复盘统计</button>
+            <button id="plan-btn" class="nav-btn">学习计划</button>
+        </nav>
+        <div class="nav-actions">
+            <button id="backup-btn" class="btn-secondary">备份数据</button>
+            <button id="restore-btn" class="btn-secondary">导入数据</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- 左侧学科分类（整合新增科目） -->
+        <aside class="sidebar">
+            <h3>学科分类</h3>
+            <ul class="subject-list">
+                <li class="subject-item" data-subject="cpp">
+                    <span class="subject-color programming"></span>
+                    C++
+                </li>
+                <li class="subject-item" data-subject="python">
+                    <span class="subject-color programming"></span>
+                    Python
+                </li>
+                <li class="subject-item" data-subject="java">
+                    <span class="subject-color programming"></span>
+                    Java
+                </li>
+                <li class="subject-item" data-subject="computer-architecture">
+                    <span class="subject-color computer"></span>
+                    计算机组成原理
+                </li>
+                <li class="subject-item" data-subject="data-structure">
+                    <span class="subject-color computer"></span>
+                    数据结构
+                </li>
+                <li class="subject-item" data-subject="advanced-math">
+                    <span class="subject-color math"></span>
+                    高等数学
+                </li>
+                <li class="subject-item" data-subject="discrete-math">
+                    <span class="subject-color math"></span>
+                    离散数学
+                </li>
+                <li class="subject-item" data-subject="english">
+                    <span class="subject-color english"></span>
+                    考研英语
+                </li>
+                <!-- 新增科目 -->
+                <li class="subject-item" data-subject="politics">
+                    <span class="subject-color english"></span>
+                    考研政治
+                </li>
+                <li class="subject-item" data-subject="shenlun">
+                    <span class="subject-color english"></span>
+                    申论
+                </li>
+                <li class="subject-item" data-subject="ability-test">
+                    <span class="subject-color english"></span>
+                    行政职业能力测验
+                </li>
+                <li class="subject-item" data-subject="linear-algebra">
+                    <span class="subject-color math"></span>
+                    线性代数
+                </li>
+                <li class="subject-item" data-subject="operating-system">
+                    <span class="subject-color computer"></span>
+                    操作系统
+                </li>
+                <li class="subject-item" data-subject="computer-network">
+                    <span class="subject-color computer"></span>
+                    计算机网络
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 薄弱点概览页面 -->
+            <section id="overview-section" class="content-section active">
+                <h2>薄弱点概览</h2>
+                <div class="dashboard">
+                    <div class="dashboard-card">
+                        <h3>待刷任务</h3>
+                        <p id="pending-count">0</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>本周已完成</h3>
+                        <p id="completed-count">0</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3>总知识点</h3>
+                        <p id="total-points">0</p>
+                    </div>
+                </div>
+                
+                <div class="weak-points">
+                    <h3>各学科薄弱点</h3>
+                    <div id="weak-points-list">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 知识点录入页面（整合新增科目） -->
+            <section id="entry-section" class="content-section">
+                <h2>知识点 / 题库录入</h2>
+                <div class="form-group">
+                    <label for="subject-select">选择学科:</label>
+                    <select id="subject-select">
+                        <option value="cpp">C++</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="computer-architecture">计算机组成原理</option>
+                        <option value="data-structure">数据结构</option>
+                        <option value="advanced-math">高等数学</option>
+                        <option value="discrete-math">离散数学</option>
+                        <option value="english">考研英语</option>
+                        <!-- 新增科目 -->
+                        <option value="politics">考研政治</option>
+                        <option value="shenlun">申论</option>
+                        <option value="ability-test">行政职业能力测验</option>
+                        <option value="linear-algebra">线性代数</option>
+                        <option value="operating-system">操作系统</option>
+                        <option value="computer-network">计算机网络</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content-type">内容类型:</label>
+                    <select id="content-type">
+                        <option value="knowledge">知识点</option>
+                        <option value="question">题目</option>
+                        <option value="coding">编程题</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content-input">内容 (支持批量粘贴):</label>
+                    <textarea id="content-input" placeholder="请输入知识点或题目内容..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="file-input-upload">或上传文件 (PDF/DOC/DOCX):</label>
+                    <input type="file" id="file-input-upload" accept=".pdf,.doc,.docx">
+                </div>
+                
+                <button id="save-content-btn" class="btn-primary">保存内容</button>
+                <button id="upload-file-btn" class="btn-secondary">上传文件</button>
+                
+                <div id="upload-status" class="upload-status" style="display: none;"></div>
+                
+                <div class="preview-area">
+                    <h3>预览区域</h3>
+                    <div id="content-preview">
+                        <!-- 预览内容 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 专项刷题页面（整合新增科目） -->
+            <section id="practice-section" class="content-section">
+                <h2>专项刷题</h2>
+                <div class="practice-controls">
+                    <select id="practice-subject">
+                        <option value="cpp">C++</option>
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="computer-architecture">计算机组成原理</option>
+                        <option value="data-structure">数据结构</option>
+                        <option value="advanced-math">高等数学</option>
+                        <option value="discrete-math">离散数学</option>
+                        <option value="english">考研英语</option>
+                        <!-- 新增科目 -->
+                        <option value="politics">考研政治</option>
+                        <option value="shenlun">申论</option>
+                        <option value="ability-test">行政职业能力测验</option>
+                        <option value="linear-algebra">线性代数</option>
+                        <option value="operating-system">操作系统</option>
+                        <option value="computer-network">计算机网络</option>
+                    </select>
+                    <button id="start-practice-btn" class="btn-primary">开始练习</button>
+                </div>
+                
+                <div id="practice-area" class="practice-area">
+                    <div id="question-display">
+                        <!-- 题目显示区域 -->
+                    </div>
+                    <div class="answer-area">
+                        <textarea id="answer-input" placeholder="在此输入答案..."></textarea>
+                        <textarea id="code-input" class="code-editor" placeholder="在此编写代码..." style="display:none;"></textarea>
+                        <div class="practice-actions">
+                            <button id="prev-question-btn" class="btn-secondary">上一题</button>
+                            <button id="next-question-btn" class="btn-primary">下一题</button>
+                            <button id="mark-weak-btn" class="btn-warning">标记薄弱点</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 复盘统计页面 -->
+            <section id="review-section" class="content-section">
+                <h2>复盘统计</h2>
+                <div class="stats-container">
+                    <div class="chart-container">
+                        <canvas id="subject-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="review-table">
+                    <h3>近期练习记录</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>学科</th>
+                                <th>题目数量</th>
+                                <th>正确率</th>
+                            </tr>
+                        </thead>
+                        <tbody id="review-records">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 学习计划页面（整合新增科目） -->
+            <section id="plan-section" class="content-section">
+                <h2>学习计划管理</h2>
+                <div class="plan-form">
+                    <div class="form-group">
+                        <label for="plan-date">计划日期:</label>
+                        <input type="date" id="plan-date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="plan-subject">学科:</label>
+                        <select id="plan-subject">
+                            <option value="cpp">C++</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="computer-architecture">计算机组成原理</option>
+                            <option value="data-structure">数据结构</option>
+                            <option value="advanced-math">高等数学</option>
+                            <option value="discrete-math">离散数学</option>
+                            <option value="english">考研英语</option>
+                            <!-- 新增科目 -->
+                            <option value="politics">考研政治</option>
+                            <option value="shenlun">申论</option>
+                            <option value="ability-test">行政职业能力测验</option>
+                            <option value="linear-algebra">线性代数</option>
+                            <option value="operating-system">操作系统</option>
+                            <option value="computer-network">计算机网络</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="plan-content">计划内容:</label>
+                        <textarea id="plan-content" placeholder="请输入学习计划内容..."></textarea>
+                    </div>
+                    
+                    <button id="save-plan-btn" class="btn-primary">保存计划</button>
+                </div>
+                
+                <div class="plan-list">
+                    <h3>我的学习计划</h3>
+                    <ul id="plans-container">
+                        <!-- 动态生成 -->
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 隐藏的文件输入用于数据导入 -->
+    <input type="file" id="file-input" accept=".json" style="display: none;">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
