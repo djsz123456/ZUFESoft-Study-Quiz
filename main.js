@@ -46,8 +46,21 @@ subjectItems.forEach(item => {
         item.classList.add('active');
         // 获取选中的学科
         const selectedSubject = item.getAttribute('data-subject');
-        // 更新概览页面内容
-        updateOverview(selectedSubject);
+        
+        // 根据当前激活的页面执行相应操作
+        const activePage = document.querySelector('.content-section.active').id;
+        if (activePage === 'overview-section') {
+            updateOverview(selectedSubject);
+        } else if (activePage === 'entry-section') {
+            // 在知识点录入页面，可设置默认学科选择
+            document.getElementById('subject-select').value = selectedSubject;
+        } else if (activePage === 'practice-section') {
+            // 在专项刷题页面，可设置默认学科选择
+            document.getElementById('practice-subject').value = selectedSubject;
+        } else if (activePage === 'plan-section') {
+            // 在学习计划页面，可设置默认学科选择
+            document.getElementById('plan-subject').value = selectedSubject;
+        }
     });
 });
 
@@ -385,4 +398,68 @@ function restoreData(event) {
         }
     };
     reader.readAsText(file);
+}
+
+// 获取学科名称
+function getSubjectName(subject) {
+    const subjectMap = {
+        'cpp': 'C++',
+        'python': 'Python',
+        'java': 'Java',
+        'computer-architecture': '计算机组成原理',
+        'data-structure': '数据结构',
+        'advanced-math': '高等数学',
+        'discrete-math': '离散数学',
+        'english': '考研英语',
+        'politics': '考研政治',
+        'shenlun': '申论',
+        'ability-test': '行政职业能力测验',
+        'linear-algebra': '线性代数',
+        'operating-system': '操作系统',
+        'computer-network': '计算机网络'
+    };
+    return subjectMap[subject] || subject;
+}
+
+// 更新概览页面
+function updateOverview(selectedSubject) {
+    // 更新统计数据
+    document.getElementById('total-points').textContent = knowledgePoints.length;
+    
+    // 过滤选中学科的知识点
+    let filteredPoints = knowledgePoints;
+    if (selectedSubject) {
+        filteredPoints = knowledgePoints.filter(point => point.subject === selectedSubject);
+    }
+    
+    // 更新待刷任务和已完成数量（这里简化处理，实际应根据具体业务逻辑计算）
+    document.getElementById('pending-count').textContent = filteredPoints.length;
+    document.getElementById('completed-count').textContent = filteredPoints.filter(p => p.mastered).length;
+    
+    // 更新薄弱点列表
+    const weakPointsList = document.getElementById('weak-points-list');
+    weakPointsList.innerHTML = '';
+    
+    const weakPoints = filteredPoints.filter(point => point.weakPoint);
+    if (weakPoints.length === 0) {
+        weakPointsList.innerHTML = '<p>暂无标记的薄弱点</p>';
+        return;
+    }
+    
+    // 按学科分组显示薄弱点
+    const subjects = [...new Set(weakPoints.map(point => point.subject))];
+    subjects.forEach(subject => {
+        const subjectPoints = weakPoints.filter(point => point.subject === subject);
+        if (subjectPoints.length > 0) {
+            const subjectDiv = document.createElement('div');
+            subjectDiv.className = 'weak-point-item';
+            subjectDiv.innerHTML = `
+                <span class="subject-tag" style="background-color: var(--${subject}-color)">
+                    ${getSubjectName(subject)}
+                </span>
+                <p>${subjectPoints[0].content.substring(0, 100)}${subjectPoints[0].content.length > 100 ? '...' : ''}</p>
+            `;
+            weakPointsList.appendChild(subjectDiv);
+        }
+    });
 }
